@@ -1,0 +1,27 @@
+* {
+    max-width: 100vw;
+}
+
+
+header {
+    background-color: gray;
+    color:white;
+    height: 100px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#quizbox {
+    margin: 20px;
+    padding: 20px;
+    border: 2px black solid;
+    background-color: darkgray;
+    color: white;
+    min-height: 200px;
+    min-width: 400px;
+}
+
+hr {
+    /* padding: 10px 0; */
+
+}
