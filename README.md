@@ -94,6 +94,10 @@ You are required to submit BOTH of the following for review:
 
 * The URL of the GitHub repository, with a unique name and a readme describing the project.
 
+## Sources
+
+https://stackoverflow.com/questions/9933803/javascript-countdown-formatting-seconds-to-hhmmss - Countdown formatting example
+
 ---
 
 © 2023 edX Boot Camps LLC. Confidential and Proprietary. All Rights Reserved.
