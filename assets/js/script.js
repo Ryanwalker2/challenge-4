@@ -5,17 +5,19 @@ var timerEl = document.querySelector('#timer');
 var submitEl = document.querySelector('#submit');
 var startEl = document.querySelector('#start');
 var navEl = document.querySelector('navbar');
+var score;
 
 // Set CSS styles
 headerEl.children[0].children[0].children[0].text = "Bootcamp Quiz";
 headerEl.setAttribute('style', 'display:flex; align-content:center')
-headerEl.children[0].setAttribute('style', 'display: flex; font-size:40px; color:cyan; margin-left: 20px');
+headerEl.children[0].setAttribute('style', 'display: flex; font-size:60px; color:cyan; margin-left: 20px');
 timerEl.textContent = '10 Minutes Allowed';
 timerEl.setAttribute('style', 'display: flex; align-content: center; justify-content: end; padding: 10px;');
-quizboxEl.children[0].setAttribute('style', 'font-size: 20px; display: flex; justify-content: center; padding: 20px')
+quizboxEl.children[0].setAttribute('class', 'container')
+quizboxEl.children[0].setAttribute('style', 'font-size: 50px; display: flex; justify-content: center; padding: 40px')
 startEl.textcontent = 'Start Quiz!';
 submitEl.setAttribute('style', 'display:flex; justify-content:center');
-submitEl.children[0].setAttribute('style', 'padding: 10px; background:lightgreen;')
+submitEl.children[0].setAttribute('style', 'padding: 20px; background:lightgreen; font-size: 30px; border-radius:50px')
 
 
 //constant containing questions and answers for quiz in arrays.
@@ -70,36 +72,57 @@ const questionnaire = [
 ];
 // Listener on start quiz button
 startEl.addEventListener('click', function () {
-    startEl.setAttribute('style', 'display:none;')
+    submitEl.innerHTML = '';
     startQuiz();
-}
-);
-function createQuestion() {
-    var curIdx = 0;
-    for (var i = 0; i < questionnaire[curIdx].options.length; i++) {
-        // Populate QuestionEl with current index question
-        questionEl.textContent = questionnaire[curIdx].question;
-        questionEl.setAttribute('style', 'font-size:20px; display:flex; justify-content:center; padding: 20px;');
-        //Create a button for each option for the current index
-        var btn = document.createElement('button');
-        btn.textContent = questionnaire[curIdx].options[i];
-        btn.setAttribute('style', 'justify-content:center; padding:20px; width:100%;');
-        btn.dataset.idx = i;
-        btn.addEventListener('click', function (event) {
-            if (event.target.dataset.idx == questionnaire[curIdx].answer) {
-                console.log('correct');
-                curIdx++;
-            } else {
-                console.log('incorrect');
-                curIdx++;
-            };
-            quizboxEl.remove(btn);
-            console.log(curIdx);
+});
 
-        })
-        quizboxEl.appendChild(btn);
+function createQuestion(curIdx) {
+    console.log(curIdx);
+    var answerBoxEl = document.createElement('div');
+    answerBoxEl.setAttribute('class', 'answers');
+    quizboxEl.appendChild(answerBoxEl);
+    if (curIdx >= questionnaire.length) {
+        questionEl.remove();
+        var scoreEl = document.createElement('h3');
+        scoreEl.setAttribute('class', 'score');
+        scoreEl.textContent = `Quiz Complete! Final Score: ${score}`;
+        quizboxEl.appendChild(scoreEl);
+        console.log(`Quiz Complete! Score: ${score}`);
+        var restartEl = document.createElement('button');
+        restartEl.setAttribute('class', 'btn');
+        restartEl.setAttribute('style', 'padding: 20px; background:lightgreen; font-size: 30px; border-radius:50px; justify-content: center')
+        restartEl.textContent = 'Click to restart Quiz';
+        restartEl.addEventListener('click', function() {
+            window.location.reload()
+        });
+        submitEl.appendChild(restartEl);
+        
+    } else {
+        for (var i = 0; i < questionnaire[curIdx].options.length; i++) {
+            // Populate QuestionEl with current index question
+            questionEl.textContent = questionnaire[curIdx].question;
+            questionEl.setAttribute('style', 'font-size:30px; display:flex; justify-content:center; padding: 40px 0;');
+            //Create a button for each option for the current index
+            var btn = document.createElement('button');
+            btn.textContent = questionnaire[curIdx].options[i];
+            btn.setAttribute('class', 'btn');
+            btn.setAttribute('style', 'font-size: 30px; justify-content:center; padding:20px; margin:20px 0; width:100%;');
+            btn.dataset.idx = i;
+            answerBoxEl.appendChild(btn);
+            btn.addEventListener('click', function (event) {
+                if (event.target.dataset.idx == questionnaire[curIdx].answer) {
+                    console.log('correct');
+                    score++;
+                } else {
+                    console.log('incorrect');
+                };
+                answerBoxEl.remove();
+                curIdx++;
+                createQuestion(curIdx);
+            })
+        }
     }
-}
+};
 function startTimer() {
     var timeLeft = 600;
     var x = setInterval(function () {  //set interval
@@ -131,7 +154,9 @@ function startTimer() {
 }
 // Function to start quiz
 function startQuiz() {
+    score = 0;
     startTimer();
     // Populate questions and options
-    createQuestion();
+    var curIdx = 0
+    createQuestion(curIdx);
 }
